@@ -1,0 +1,63 @@
+#map {
+    border: 10px solid black;
+    height: 800px;
+    width: 1200px;
+    position: relative;
+}
+
+.congratulation {
+    border: 10px solid white;
+    height: 200px;
+    width: 400px;
+    top: 280px;
+    left: 450px;
+    color: white;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+
+}
+
+
+#background {
+    background: url('./img/tarmac.jpg');
+    height: 800px;
+    width: 1200px;
+}
+
+#player {
+    background: url("./img/old-man7.png") no-repeat;
+    width: 45px;
+    height: 125px;
+    position: absolute;
+    top: 500px;
+    left: 50px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#hospital {
+    background-image: url('./img/hospital2.png');
+    width: 180px;
+    height: 180px;
+    left: 1050px;
+    top: 25px;
+    background-repeat: no-repeat;
+    position: absolute;
+}
+
+.kamfer {
+    background: url('./img/kamfer.png');
+    background-repeat: no-repeat;
+    position: absolute;
+    background-size: cover;
+    background-position: center center;
+    width: 50px;
+    height: 100px;
+    top: 680px;
+    left: 700px;
+    z-index: 99;
+
+
+}
+

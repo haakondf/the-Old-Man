@@ -1,0 +1,105 @@
+https://stackoverflow.com/questions/5203407/javascript-multiple-keys-pressed-at-once 
+
+
+Multiple keystroke detection is easy if you understand the concept
+
+The way I do it is like this:
+
+var map = {}; // You could also use an array
+onkeydown = onkeyup = function(e){
+    e = e || event; // to deal with IE
+    map[e.keyCode] = e.type == 'keydown';
+    /* insert conditional here */
+}
+This code is very simple: Since the computer only passes one keystroke at a time, an array is created to keep track of multiple keys. The array can then be used to check for one or more keys at once.
+
+Just to explain, let's say you press A and B, each fires a keydown event that sets map[e.keyCode] to the value of e.type == keydown, which evaluates to either true or false. Now both map[65] and map[66] are set to true. When you let go of A, the keyup event fires, causing the same logic to determine the opposite result for map[65] (A), which is now false, but since map[66] (B) is still "down" (it hasn't triggered a keyup event), it remains true.
+
+The map array, through both events, looks like this:
+
+// keydown A 
+// keydown B
+[
+    65:true,
+    66:true
+]
+// keyup A
+// keydown B
+[
+    65:false,
+    66:true
+]
+There are two things you can do now:
+
+A) A Key logger (example) can be created as a reference for later when you want to quickly figure out one or more key codes. Assuming you have defined an html element and pointed to it with the variable element.
+
+element.innerHTML = '';
+var i, l = map.length;
+for(i = 0; i < l; i ++){
+    if(map[i]){
+        element.innerHTML += '<hr>' + i;
+    }
+}
+Note: You can easily grab an element by its id attribute.
+
+<div id="element"></div>
+This creates an html element that can be easily referenced in javascript with element
+
+alert(element); // [Object HTMLDivElement]
+You don't even have to use document.getElementById() or $() to grab it. But for the sake of compatibility, use of jQuery's $() is more widely recommended.
+
+Just make sure the script tag comes after the body of the HTML. Optimization tip: Most big-name websites put the script tag after the body tag for optimization. This is because the script tag blocks further elements from loading until its script is finished downloading. Putting it ahead of the content allows the content to load beforehand.
+
+B (which is where your interest lies) You can check for one or more keys at a time where /*insert conditional here*/ was, take this example:
+
+if(map[17] && map[16] && map[65]){ // CTRL+SHIFT+A
+    alert('Control Shift A');
+}else if(map[17] && map[16] && map[66]){ // CTRL+SHIFT+B
+    alert('Control Shift B');
+}else if(map[17] && map[16] && map[67]){ // CTRL+SHIFT+C
+    alert('Control Shift C');
+}
+Edit: That isn't the most readable snippet. Readability's important, so you could try something like this to make it easier on the eyes:
+
+function test_key(selkey){
+    var alias = {
+        "ctrl":  17,
+        "shift": 16,
+        "A":     65,
+        /* ... */
+    };
+
+    return key[selkey] || key[alias[selkey]];
+}
+
+function test_keys(){
+    var keylist = arguments;
+
+    for(var i = 0; i < keylist.length; i++)
+        if(!test_key(keylist[i]))
+            return false;
+
+    return true;
+}
+Usage:
+
+test_keys(13, 16, 65)
+test_keys('ctrl', 'shift', 'A')
+test_key(65)
+test_key('A')
+Is this better?
+
+if(test_keys('ctrl', 'shift')){
+    if(test_key('A')){
+        alert('Control Shift A');
+    } else if(test_key('B')){
+        alert('Control Shift B');
+    } else if(test_key('C')){
+        alert('Control Shift C');
+    }
+}
+(end of edit)
+
+This example checks for CtrlShiftA, CtrlShiftB, and CtrlShiftC
+
+It's just as simple as that :)
